@@ -1,0 +1,28 @@
+#app {
+    width: 100%;
+}
+
+img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
+
+.row-line {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    &--space-between {
+        justify-content: space-between;
+    }
+}
+
+.header {
+    &__logo {
+        padding: 20px;
+        display: block;
+        img {
+            max-width: 170px;
+        }
+    }
+}

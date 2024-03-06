@@ -50,7 +50,6 @@ const onSearch = async () => {
     isLoading.value = false;
   }
 }
-console.log('state.entities', store.entities)
 </script>
 
 <template>

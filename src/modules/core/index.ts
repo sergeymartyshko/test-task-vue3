@@ -48,8 +48,6 @@ export const useCoreStore = defineStore(storeName, {
                     hitsTotal: responses[1].data.hits.total,
                     bandWidth: formatBytes(responses[1].data.bandwidth.total),
                 }
-
-                console.log(this.currentEntity)
             } catch (e) {
                 console.warn(e)
                 this.currentEntity = null;

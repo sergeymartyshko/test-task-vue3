@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import axios from "axios";
 import {computed, ref} from "vue";
 import {useCoreStore} from "@/modules/core";
 
@@ -19,21 +18,8 @@ const isLoading = ref<boolean>(false);
 
 const currentItem = ref<any>(null);
 
-const onRowClick = async (itemPackage) => {
-  let responses = await Promise.all([
-    axios.get(`https://data.jsdelivr.com/v1/packages/npm/${itemPackage.name}`),
-    axios.get(`https://data.jsdelivr.com/v1/stats/packages/npm/${itemPackage.name}?period=month`)
-  ])
-
-  currentItem.value = {
-    name: itemPackage.name,
-    description: itemPackage.description,
-    version: responses[0].data.versions,
-    tags: responses[0].data.tags,
-    hitsTotal: responses[1].data.hits.total,
-    bandWidth: formatBytes(responses[1].data.bandwidth.total),
-  }
-
+const onRowClick = async (item) => {
+  await store.fetchDetails(item);
   dialog.value = true
 }
 
@@ -64,7 +50,7 @@ const onSearch = async () => {
     isLoading.value = false;
   }
 }
-
+console.log('state.entities', store.entities)
 </script>
 
 <template>
@@ -138,7 +124,7 @@ const onSearch = async () => {
         @update:modelValue="onPageClick"
     ></v-pagination>
     <v-dialog
-        v-if="currentItem"
+        v-if="store.currentEntity"
         v-model="dialog"
         width="auto"
     >
@@ -148,19 +134,19 @@ const onSearch = async () => {
       >
         <v-card-item>
           <v-card-title>
-            {{ currentItem.name }}
+            {{ store.currentEntity.name }}
           </v-card-title>
         </v-card-item>
 
-        <v-card-text v-html="currentItem.description"></v-card-text>
-        <v-card-text>Total: {{ currentItem.hitsTotal }}</v-card-text>
-        <v-card-text>Size: {{ currentItem.bandWidth }}</v-card-text>
+        <v-card-text v-html="store.currentEntity.description"></v-card-text>
+        <v-card-text>Total: {{ store.currentEntity.hitsTotal }}</v-card-text>
+        <v-card-text>Size: {{ store.currentEntity.bandWidth }}</v-card-text>
         <v-expansion-panels
             multiple
         >
           <v-expansion-panel>
             <v-expansion-panel-title>Versions</v-expansion-panel-title>
-            <v-expansion-panel-text v-for="item in currentItem.version">
+            <v-expansion-panel-text v-for="item in store.currentEntity.version">
               Version - {{ item.version }}
               Link - <a :href="item.links.self">Download</a>
             </v-expansion-panel-text>

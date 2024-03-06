@@ -1,26 +1,50 @@
-export interface CoreState {
-    isInited: boolean;
-    isLoading: false;
-    entities: SearchResult|null;
-    currentEntity: null;
+export interface StateInterface {
+    entities: PackageInterface[];
+    currentEntity: CurrentEntityInterface|null;
     total: number;
     perPage: number;
     page: number;
 }
 
-export interface SearchResult {
-    objects: ItemObject[];
+export interface CurrentEntityInterface {
+    name: string;
+    description: string;
+    versions: object;
+    tags: object;
+    hitsTotal: number;
+    bandWidth: number|string;
 }
 
-export interface ItemSearchResult {
-    package: PackageObject;
-}
-
-export interface PackageObject {
-    author: object;
+export interface PackageInterface {
+    author: AuthorInterface;
     date: string;
     description: string;
-    links: object;
+    links: LinksInterface;
+    maintainers: MaintainersInterface[];
     name: string;
-    version: string
+    publisher: PublisherInterface;
+    scope: string;
+    version: string;
+}
+
+export interface AuthorInterface {
+    name: string;
+    email: string;
+}
+
+export interface LinksInterface {
+    npm: string;
+    homepage: string;
+    repository: string;
+    bugs: string;
+}
+
+export interface MaintainersInterface {
+    username: string;
+    email: string;
+}
+
+export interface PublisherInterface {
+    username: string;
+    email: string;
 }
